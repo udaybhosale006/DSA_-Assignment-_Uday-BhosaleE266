@@ -1,0 +1,39 @@
+class Solution {
+public:
+   
+    int findBound(vector<int>& nums, int target, bool isFirst) {
+        int left = 0, right = nums.size() - 1, result = -1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                result = mid;
+                if (isFirst) {
+                    right = mid - 1;  // move left for first occurrence
+                } else {
+                    left = mid + 1;   // move right for last occurrence
+                }
+            } 
+            else if (nums[mid] < target) {
+                left = mid + 1;
+            } 
+            else {
+                right = mid - 1;
+            }
+        }
+        return result;
+    }
+
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> result(2, -1);
+        if (nums.empty()) return result;
+
+        int first = findBound(nums, target, true);
+        if (first == -1) return result;  // target not found
+
+        int last = findBound(nums, target, false);
+        result[0] = first;
+        result[1] = last;
+
+        return result;
+    }
+};
